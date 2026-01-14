@@ -1,0 +1,572 @@
+flowMeta:
+  name: 旅行搭子 Pro
+  description: 嗨～我是旅行搭子，讯飞平台打造的旅行规划助手，帮你规划路线、订食宿交通，解锁目的地全攻略～
+  avatarIcon: https://oss-beijing-m8.openstorage.cn/SparkBotProd/aicloud-robot/user-icon/40b6ceba4d225104e8be977d48cc067a.jpg
+  avatarColor: '#FFEAD5'
+  advancedConfig: '{"prologue":{"enabled":true,"inputExample":["帮我规划一份 3 天 2 晚的小众城市旅行攻略","预算
+    5000，适合周末出发的短途旅行推荐","亲子游去哪玩？求省心不踩坑的路线安排"],"prologueText":"你好，我是一个旅行搭子，是专门用来做旅行规划的助手，很高兴认识你。"},"textToSpeech":{"enabled":true,"vcn_cn":"x4_lingxiaoqi","vcn_en":"x4_EnUs_Luna"},"needGuide":false,"suggestedQuestionsAfterAnswer":{"enabled":true},"chatBackground":{"enabled":true,"info":{"name":"ComfyUI_00069_.png","type":"png","total":"2.63
+    MB","url":"https://oss-beijing-m8.openstorage.cn/SparkBotProd/icon/user/sparkBot_1767894543914_ComfyUI_00069_.png"}}}'
+  category: 15
+  dslVersion: v1
+flowData:
+  nodes:
+  - id: node-start::d61b0f71-87ee-475e-93ba-f1607f0ce783
+    dragging: false
+    selected: false
+    width: 256
+    height: 74
+    position:
+      x: -658.5269757511514
+      y: 108.23627473127726
+    positionAbsolute:
+      x: -658.5269757511514
+      y: 108.23627473127726
+    type: 开始节点
+    data:
+      allowInputReference: false
+      allowOutputReference: true
+      label: 开始
+      status: ''
+      nodeMeta:
+        aliasName: 开始节点
+        nodeType: 基础节点
+      inputs: [
+        ]
+      outputs:
+      - id: 0918514b-72a8-4646-8dd9-ff4a8fc26d44
+        name: AGENT_USER_INPUT
+        nameErrMsg: ''
+        schema:
+          type: string
+          default: 用户本轮对话输入内容
+        required: true
+        deleteDisabled: true
+      nodeParam: {
+        }
+      icon: https://oss-beijing-m8.openstorage.cn/pro-bucket/sparkBot/common/workflow/icon/start-node-icon.png
+      description: 工作流的开启节点，用于定义流程调用所需的业务变量信息。
+      updatable: false
+  - id: node-end::cda617af-551e-462e-b3b8-3bb9a041bf88
+    dragging: false
+    selected: false
+    width: 270
+    height: 74
+    position:
+      x: 348.5007163141594
+      y: 640.5540929806127
+    positionAbsolute:
+      x: 348.5007163141594
+      y: 640.5540929806127
+    type: 结束节点
+    data:
+      allowInputReference: true
+      allowOutputReference: false
+      label: 结束
+      references: [
+        ]
+      status: ''
+      nodeMeta:
+        aliasName: 结束节点
+        nodeType: 基础节点
+      inputs:
+      - id: 78fc4457-a599-42b1-94a2-5ac54a9c524b
+        name: output
+        nameErrMsg: ''
+        schema:
+          type: string
+          value:
+            type: ref
+            content:
+              name: output
+              id: b9f8259d-1694-4352-b807-520fcb3d4d7c
+              nodeId: agent::e721acb5-4aa7-4008-941b-723f80add486
+            contentErrMsg: ''
+        fileType: ''
+      - id: c6c3b456-2457-4b91-8483-4137ed27b3ce
+        name: finalText
+        nameErrMsg: ''
+        schema:
+          type: string
+          value:
+            type: ref
+            content:
+              name: output
+              id: fa3f041d-ec24-46cf-a772-ea5616c271c8
+              nodeId: spark-llm::281219a7-5872-4a14-a98e-dcfc90036698
+            contentErrMsg: ''
+        fileType: ''
+      - id: b5c764a9-3630-40b3-befb-961b9816a16e
+        name: thinging
+        nameErrMsg: ''
+        schema:
+          type: string
+          value:
+            type: ref
+            content:
+              name: REASONING_CONTENT
+              id: 8890ab49-4c4f-445e-ade3-ce7c8ccaca42
+              nodeId: agent::e721acb5-4aa7-4008-941b-723f80add486
+            contentErrMsg: ''
+        fileType: ''
+      outputs: [
+        ]
+      nodeParam:
+        template: '{{output}}'
+        streamOutput: true
+        templateErrMsg: ''
+        outputMode: 1
+        reasoningTemplate: '{{thinging}}'
+      icon: https://oss-beijing-m8.openstorage.cn/pro-bucket/sparkBot/common/workflow/icon/end-node-icon.png
+      description: 工作流的结束节点，用于输出工作流运行后的最终结果。
+      updatable: false
+  - id: spark-llm::281219a7-5872-4a14-a98e-dcfc90036698
+    dragging: false
+    selected: false
+    width: 256
+    height: 124
+    position:
+      x: -221.6450750941682
+      y: 813.8273537987588
+    positionAbsolute:
+      x: -221.6450750941682
+      y: 813.8273537987588
+    type: 大模型
+    data:
+      allowInputReference: true
+      allowOutputReference: true
+      label: 兜底大模型
+      labelEdit: false
+      references: [
+        ]
+      status: ''
+      nodeMeta:
+        aliasName: 大模型
+        nodeType: 基础节点
+      inputs:
+      - id: 782e10f4-b550-445e-aba1-787107aad4f3
+        name: input
+        nameErrMsg: ''
+        schema:
+          type: string
+          value:
+            type: ref
+            content:
+              name: AGENT_USER_INPUT
+              id: 0918514b-72a8-4646-8dd9-ff4a8fc26d44
+              nodeId: node-start::d61b0f71-87ee-475e-93ba-f1607f0ce783
+            contentErrMsg: ''
+        fileType: ''
+      outputs:
+      - id: fa3f041d-ec24-46cf-a772-ea5616c271c8
+        name: output
+        nameErrMsg: ''
+        schema:
+          type: string
+          default: 旅游攻略
+      nodeParam:
+        topK: 4
+        template: '{{input}}'
+        enableChatHistoryV2:
+          isEnabled: false
+          rounds: 1
+        auditing: default
+        llmId: 110
+        url: wss://spark-api.xf-yun.com/v4.0/chat
+        uid: '16588402685'
+        patchId: '0'
+        templateErrMsg: ''
+        domain: 4.0Ultra
+        appId: 12a0a7e2
+        maxTokens: 2048
+        temperature: 0.5
+        systemTemplate: |-
+          ## 角色
+          你是一个旅行规划助手，专注于帮助用户规划他们的旅行路线、预订住宿和交通，以及提供目的地的旅游信息和建议。
+          ## 技能
+          1. 制定个性化旅行计划：
+          - 根据用户的偏好、预算和时间限制，设计详细的旅行路线和日程安排。
+          - 考虑用户的兴趣爱好，推荐适合的活动和景点。
+          - 提供关于当地文化、风俗习惯和必尝美食的信息。
+          2. 预订服务：
+          - 协助用户预订机票、酒店和其他交通工具。
+          - 比较不同供应商的价格和服务，帮助用户找到性价比最高的选项。
+          - 提供预订确认信息和管理用户的预订记录。
+          3. 提供实时旅行建议：
+          - 根据天气变化、节假日或其他突发事件，及时调整旅行计划。
+          - 在旅途中为用户提供实时支持，解答任何关于行程的问题。
+          - 分享实用的旅行小贴士和应急联系方式。
+          ## 规则：
+          -请仔细分析用户的【输入信息】，尤其是用户的信息可能不是很全面模糊的时候，你应该尽量推测用户的情况，并且根据技能要求进行输出结果。
+          - 去AI味引导用户多轮对话，建议3-5次对话。理解用户意图后输出旅行规划。
+          ## 限制
+          - 只讨论与旅行规划相关的内容，拒绝回答与旅行规划无关的话题。
+          - 所有的输出内容必须按照给定的格式进行组织，不能偏离框架要求。
+          - 提供的旅行建议应基于公开可获取的信息，不涉及个人隐私或敏感数据。
+          旅行规划助手
+        model: spark
+        serviceId: bm4
+        respFormat: 0
+        llmIdErrMsg: ''
+      icon: https://oss-beijing-m8.openstorage.cn/pro-bucket/sparkBot/common/workflow/icon/largeModelIcon.png
+      description: 根据输入的提示词，调用选定的大模型，对提示词作出回答
+      updatable: false
+  - id: mcp::261acdbe-26ba-4b55-9a36-ecca4bae60fb
+    dragging: false
+    selected: false
+    width: 295
+    height: 100
+    position:
+      x: -642.9275125833676
+      y: 323.7877080732629
+    positionAbsolute:
+      x: -642.9275125833676
+      y: 323.7877080732629
+    type: MCP
+    data:
+      allowInputReference: true
+      allowOutputReference: true
+      label: 安全合规审核
+      labelEdit: false
+      references: [
+        ]
+      status: ''
+      nodeMeta:
+        aliasName: MCP
+        nodeType: 工具节点
+      inputs:
+      - id: 299db81c-b2d5-47b1-94b0-4f1e0cdc34f8
+        name: is_match_all
+        nameErrMsg: ''
+        schema:
+          type: integer
+          value:
+            type: literal
+            content: '1'
+            contentErrMsg: ''
+        description: 是否全匹配： 1 代表是 0 代表否 默认取值0，匹配到敏感词则不再匹配，不会返回所有敏感分类。
+        required: false
+      - id: ea7d571d-3aac-4a23-9b68-58a29747a5b2
+        name: categories
+        nameErrMsg: ''
+        schema:
+          type: array
+          value:
+            type: literal
+            content: '["pornDetection","violentTerrorism","political"]'
+            contentErrMsg: ''
+        description: 指定检测的敏感分类： pornDetection 色情 violentTerrorism 暴恐 political 涉政
+          lowQualityIrrigation 低质量灌水 contraband 违禁 advertisement 广告 uncivilizedLanguage
+          不文明用语
+        required: false
+      - id: fd4d0537-d58c-40c2-9e70-b40d0b7f244e
+        name: content
+        nameErrMsg: ''
+        schema:
+          type: string
+          value:
+            type: ref
+            content:
+              name: AGENT_USER_INPUT
+              id: 0918514b-72a8-4646-8dd9-ff4a8fc26d44
+              nodeId: node-start::d61b0f71-87ee-475e-93ba-f1607f0ce783
+            contentErrMsg: ''
+        description: 待识别文本，文本长度最大支持 5 千字符
+        required: true
+      outputs:
+      - id: d4ad1631-93c7-4bce-997f-b5f098c1c1e4
+        name: result
+        nameErrMsg: ''
+        schema:
+          type: object
+          properties:
+          - id: d6139baf-1e21-4138-9f69-30134a3b9ba8
+            name: isError
+            required: false
+            type: boolean
+            properties: [
+              ]
+            default: ''
+          - id: 6af38267-17fe-4e77-a064-1f345035e75a
+            name: content
+            required: false
+            type: array-object
+            default: ''
+          default: ''
+        required: false
+      nodeParam:
+        toolDescription: 基于业界先进的语义模型和海量的多语种样本库，有效识别各类场景中涉政、违禁、色情、暴恐、辱骂、广告导流等风险文本内容，支持风险标签识别
+        handlingEdge: normal_one_of::ca5f4486-5c1c-4348-9fff-276cfed7147e
+        exceptionHandlingEdge: fail_one_of::27d14c59-b62a-4a90-9461-9e2b09f648ba
+        mcpServerId: mcp@api92760f0da421000
+        toolName: 文本合规
+      retryConfig:
+        shouldRetry: false
+      icon: https://oss-beijing-m8.openstorage.cn/SparkBotProd/icon/common/mcp-new.png
+      updatable: false
+  - id: agent::e721acb5-4aa7-4008-941b-723f80add486
+    dragging: false
+    selected: true
+    width: 319
+    height: 148
+    position:
+      x: -219.81716807619273
+      y: 585.7707726668654
+    positionAbsolute:
+      x: -219.81716807619273
+      y: 585.7707726668654
+    type: 智能体节点
+    data:
+      allowInputReference: true
+      allowOutputReference: true
+      label: 智能决策大模型
+      labelEdit: false
+      references: [
+        ]
+      status: ''
+      nodeMeta:
+        aliasName: 智能体节点
+        nodeType: Agent节点
+      inputs:
+      - id: 2d32798e-adca-42b4-90db-520111a92a4b
+        name: input
+        nameErrMsg: ''
+        schema:
+          type: string
+          value:
+            type: ref
+            content:
+              name: AGENT_USER_INPUT
+              id: 0918514b-72a8-4646-8dd9-ff4a8fc26d44
+              nodeId: node-start::d61b0f71-87ee-475e-93ba-f1607f0ce783
+            contentErrMsg: ''
+        fileType: ''
+      outputs:
+      - id: 8890ab49-4c4f-445e-ade3-ce7c8ccaca42
+        name: REASONING_CONTENT
+        nameErrMsg: ''
+        schema:
+          type: string
+          default: 模型思考过程
+        customParameterType: deepseekr1
+      - id: b9f8259d-1694-4352-b807-520fcb3d4d7c
+        name: output
+        nameErrMsg: ''
+        schema:
+          type: string
+          default: ''
+      nodeParam:
+        modelConfig:
+          domain: x1
+          api: wss://spark-api.xf-yun.com/v1/x1
+          agentStrategy: 1
+        maxLoopCount: 3
+        modelId: 219
+        enableChatHistoryV2:
+          isEnabled: true
+          rounds: 3
+        llmId: 219
+        url: wss://spark-api.xf-yun.com/v1/x1
+        uid: '16588402685'
+        modelName: Spark X1
+        patchId: '0'
+        llmSource: 1
+        plugin:
+          workflowIds: [
+            ]
+          toolsList:
+          - toolId: mcp@docker938c19cafc21000
+            name: Amap Maps
+            icon: https://oss-beijing-m8.openstorage.cn/SparkBotProd/mcp_logos/a6711f8e-038c-4e6e-abba-0eec98b1fb94.png
+            type: mcp
+          - toolId: mcp@flow7315392011107627010
+            name: 天气查询
+            icon: https://oss-beijing-m8.openstorage.cn/SparkBotProd/icon/generate/cht000b9d8b@dx196199f020ab894550.jpg
+            type: mcp
+          - toolId: mcp@flow7315390915575791618
+            name: 地铁路线查询
+            icon: https://oss-beijing-m8.openstorage.cn/SparkBotProd/icon/generate/cht000b9cae@dx19619984bc9b894550.jpg
+            type: mcp
+          mcpServerUrls:
+          - ''
+          mcpServerIds:
+          - mcp@docker938c19cafc21000
+          - mcp@flow7315392011107627010
+          - mcp@flow7315390915575791618
+          tools: [
+            ]
+        instruction:
+          queryErrMsg: ''
+          answer: |-
+            ## 角色
+            你的名字是旅行搭子!
+            你的名字是旅行搭子!
+            你的名字是旅行搭子!
+            一个由讯飞平台搭建的旅行规划助手，专注于帮助用户规划他们的旅行路线、预订住宿和交通，以及提供目的地的旅游信息和建议。
+            ## 技能
+            1. 制定个性化旅行计划：
+            - 根据用户的偏好、预算和时间限制，设计详细的旅行路线和日程安排。
+            - 考虑用户的兴趣爱好，推荐适合的活动和景点。
+            - 提供关于当地文化、风俗习惯和必尝美食的信息。
+            2. 预订服务：
+            - 协助用户预订机票、酒店和其他交通工具。
+            - 比较不同供应商的价格和服务，帮助用户找到性价比最高的选项。
+            - 提供预订确认信息和管理用户的预订记录。
+            3. 提供实时旅行建议：
+            - 根据天气变化、节假日或其他突发事件，及时调整旅行计划。
+            - 在旅途中为用户提供实时支持，解答任何关于行程的问题。
+            - 分享实用的旅行小贴士和应急联系方式。
+            ## 规则：
+            -请仔细分析用户的【输入信息】，尤其是用户的信息可能不是很全面模糊的时候，你应该尽量推测用户的情况，并且根据技能要求进行输出结果。
+            - 去AI味引导用户多轮对话，建议3-5次对话。理解用户意图后输出旅行规划。
+            ## 限制
+            - 只讨论与旅行规划相关的内容，拒绝回答与旅行规划无关的话题。
+            - 所有的输出内容必须按照给定的格式进行组织，不能偏离框架要求。
+            - 提供的旅行建议应基于公开可获取的信息，不涉及个人隐私或敏感数据。
+          reasoning: ''
+          query: '{{input}}'
+        appId: 12a0a7e2
+        domain: x1
+        modelEnabled: true
+        serviceId: x1
+        llmIdErrMsg: ''
+      icon: https://oss-beijing-m8.openstorage.cn/SparkBotProd/icon/common/agent.png
+      description: 依据任务需求，通过选择合适的工具列表，实现大模型的智能调度
+      updatable: false
+  - id: decision-making::6f1ca61b-ec58-43e3-b4c1-8b0829ad5c03
+    dragging: false
+    selected: false
+    width: 256
+    height: 172
+    position:
+      x: -669.1442384960617
+      y: 585.6820391619054
+    positionAbsolute:
+      x: -669.1442384960617
+      y: 585.6820391619054
+    type: 决策
+    data:
+      allowInputReference: true
+      allowOutputReference: true
+      label: 安全合规决策
+      labelEdit: false
+      references: [
+        ]
+      status: ''
+      nodeMeta:
+        aliasName: 决策
+        nodeType: 基础节点
+      inputs:
+      - id: ef9a494f-8822-455f-95f9-fd715cd1d278
+        name: Query
+        nameErrMsg: ''
+        schema:
+          type: boolean
+          value:
+            type: ref
+            content:
+              name: result.isError
+              id: d6139baf-1e21-4138-9f69-30134a3b9ba8
+              nodeId: mcp::261acdbe-26ba-4b55-9a36-ecca4bae60fb
+            contentErrMsg: ''
+        fileType: ''
+      outputs:
+      - id: 9498e07b-5ecc-4d66-9428-d6db0415f4bd
+        name: class_name
+        nameErrMsg: ''
+        schema:
+          type: string
+          default: ''
+      nodeParam:
+        topK: 4
+        enableChatHistoryV2:
+          isEnabled: false
+          rounds: 1
+        reasonMode: 1
+        auditing: default
+        llmId: 110
+        promptPrefix: ''
+        url: wss://spark-api.xf-yun.com/v4.0/chat
+        uid: '16588402685'
+        patchId: '0'
+        intentChains:
+        - intentType: 2
+          name: 合规检测通过
+          description: 安全合规检测结果值为false
+          id: intent-one-of::98f536c1-df6f-45c3-a933-df2c9c68dbd8
+          nameErrMsg: ''
+          descriptionErrMsg: ''
+        - intentType: 1
+          name: default
+          description: 默认意图
+          id: intent-one-of::cf767229-0328-499e-99f9-231726397ff9
+          nameErrMsg: ''
+          descriptionErrMsg: ''
+        domain: 4.0Ultra
+        appId: 12a0a7e2
+        maxTokens: 2048
+        temperature: 0.5
+        model: spark
+        useFunctionCall: true
+        serviceId: bm4
+        llmIdErrMsg: ''
+      icon: https://oss-beijing-m8.openstorage.cn/pro-bucket/sparkBot/common/workflow/icon/designMakeIcon.png
+      description: 结合输入的参数与填写的意图，决定后续的逻辑走向
+      updatable: false
+  edges:
+  - source: node-start::d61b0f71-87ee-475e-93ba-f1607f0ce783
+    target: mcp::261acdbe-26ba-4b55-9a36-ecca4bae60fb
+    type: customEdge
+    id: reactflow__edge-node-start::d61b0f71-87ee-475e-93ba-f1607f0ce783-mcp::261acdbe-26ba-4b55-9a36-ecca4bae60fb
+    markerEnd:
+      color: '#6356EA'
+      type: arrow
+    data:
+      edgeType: curve
+  - source: mcp::261acdbe-26ba-4b55-9a36-ecca4bae60fb
+    sourceHandle: normal_one_of::ca5f4486-5c1c-4348-9fff-276cfed7147e
+    target: decision-making::6f1ca61b-ec58-43e3-b4c1-8b0829ad5c03
+    type: customEdge
+    id: reactflow__edge-mcp::261acdbe-26ba-4b55-9a36-ecca4bae60fbnormal_one_of::ca5f4486-5c1c-4348-9fff-276cfed7147e-decision-making::6f1ca61b-ec58-43e3-b4c1-8b0829ad5c03
+    markerEnd:
+      color: '#6356EA'
+      type: arrow
+    data:
+      edgeType: curve
+  - source: decision-making::6f1ca61b-ec58-43e3-b4c1-8b0829ad5c03
+    sourceHandle: intent-one-of::98f536c1-df6f-45c3-a933-df2c9c68dbd8
+    target: agent::e721acb5-4aa7-4008-941b-723f80add486
+    type: customEdge
+    id: reactflow__edge-decision-making::6f1ca61b-ec58-43e3-b4c1-8b0829ad5c03intent-one-of::98f536c1-df6f-45c3-a933-df2c9c68dbd8-agent::e721acb5-4aa7-4008-941b-723f80add486
+    markerEnd:
+      color: '#6356EA'
+      type: arrow
+    data:
+      edgeType: curve
+  - source: agent::e721acb5-4aa7-4008-941b-723f80add486
+    target: node-end::cda617af-551e-462e-b3b8-3bb9a041bf88
+    type: customEdge
+    id: reactflow__edge-agent::e721acb5-4aa7-4008-941b-723f80add486-node-end::cda617af-551e-462e-b3b8-3bb9a041bf88
+    markerEnd:
+      color: '#6356EA'
+      type: arrow
+    data:
+      edgeType: curve
+  - source: spark-llm::281219a7-5872-4a14-a98e-dcfc90036698
+    target: node-end::cda617af-551e-462e-b3b8-3bb9a041bf88
+    type: customEdge
+    id: reactflow__edge-spark-llm::281219a7-5872-4a14-a98e-dcfc90036698-node-end::cda617af-551e-462e-b3b8-3bb9a041bf88
+    markerEnd:
+      color: '#6356EA'
+      type: arrow
+    data:
+      edgeType: curve
+  - source: decision-making::6f1ca61b-ec58-43e3-b4c1-8b0829ad5c03
+    sourceHandle: intent-one-of::cf767229-0328-499e-99f9-231726397ff9
+    target: spark-llm::281219a7-5872-4a14-a98e-dcfc90036698
+    type: customEdge
+    id: reactflow__edge-decision-making::6f1ca61b-ec58-43e3-b4c1-8b0829ad5c03intent-one-of::cf767229-0328-499e-99f9-231726397ff9-spark-llm::281219a7-5872-4a14-a98e-dcfc90036698
+    markerEnd:
+      color: '#6356EA'
+      type: arrow
+    data:
+      edgeType: curve
